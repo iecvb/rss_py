@@ -1,12 +1,25 @@
 import requests
 import xmltodict
-from flask import Flask, request, jsonify
+from flask import jsonify
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from urllib.parse import urlparse, parse_qs
+import json
 
-PODCAST_URL = 'https://anchor.fm/s/49f0c604/podcast/rss'
+class RSSHandler(BaseHTTPRequestHandler):
+    PODCAST_URL = 'https://anchor.fm/s/49f0c604/podcast/rss'
+    def do_GET(self):
+        # Busca e analisa os dados do podcast
+        xml_text = fetch_podcast_data()
 
-app = Flask(__name__)
+        podcast_data = parse_podcast_data(xml_text)
 
-@app.route('/')
+        # Retorna os dados do podcast em formato JSON
+        self.send_response(200)
+        self.send_header('Content-Type', 'application/json')
+        self.end_headers()
+        self.wfile.write(json.dumps(podcast_data).encode())
+        return
+
 def rss_json():   
     # Busca e analisa os dados do podcast
     xml_text = fetch_podcast_data()
@@ -48,5 +61,3 @@ def parse_podcast_data(xml_text):
 
     return podcast_data[:20]
 
-if __name__ == '__main__':
-    app.run()
