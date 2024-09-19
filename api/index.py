@@ -1,12 +1,13 @@
-import functions_framework
 import requests
 import xmltodict
-from flask import jsonify
+from flask import Flask, request, jsonify
 
 PODCAST_URL = 'https://anchor.fm/s/49f0c604/podcast/rss'
 
-@functions_framework.http
-def rss_json(request):
+app = Flask(__name__)
+
+@app.route('/rss', methods=['GET'])
+def rss_json():
     """HTTP Cloud Function.
     Args:
         request (flask.Request): The request object.
@@ -21,7 +22,7 @@ def rss_json(request):
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET',
         'Access-Control-Allow-Headers': 'Content-Type',
-    }
+    }*
 
     if request.method == 'OPTIONS':
         # Handle preflight requests
@@ -66,3 +67,6 @@ def parse_podcast_data(xml_text):
         })
 
     return podcast_data[:20]
+
+if __name__ == '__main__':
+    app.run()
