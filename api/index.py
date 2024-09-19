@@ -9,8 +9,8 @@ class handler(BaseHTTPRequestHandler):
     PODCAST_URL = 'https://anchor.fm/s/49f0c604/podcast/rss'
     def do_GET(self):
         # Busca e analisa os dados do podcast
-        xml_text = fetch_podcast_data()
-        podcast_data = parse_podcast_data(xml_text)
+        xml_text = self.fetch_podcast_data()
+        podcast_data = self.parse_podcast_data(xml_text)
 
         # Retorna os dados do podcast em formato JSON
         self.send_response(200)
@@ -21,12 +21,12 @@ class handler(BaseHTTPRequestHandler):
 
     def rss_json():   
         # Busca e analisa os dados do podcast
-        xml_text = fetch_podcast_data()
+        xml_text = self.fetch_podcast_data()
         
         if not xml_text:
             return jsonify({'error': 'Erro ao buscar o feed do podcast'})
 
-        podcast_data = parse_podcast_data(xml_text)
+        podcast_data = self.parse_podcast_data(xml_text)
         
         # Retorna os dados do podcast em formato JSON
         return jsonify(podcast_data)
