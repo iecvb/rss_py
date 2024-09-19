@@ -1,0 +1,4 @@
+functions-framework==3.*
+requests==2.31.0
+xmltodict==0.13.0
+jsonify==0.5
