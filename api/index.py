@@ -1,10 +1,62 @@
-from http.server import BaseHTTPRequestHandler
- 
-class handler(BaseHTTPRequestHandler):
- 
+import requests
+import xmltodict
+from flask import jsonify
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from urllib.parse import urlparse, parse_qs
+import json
+
+class RSSHandler(BaseHTTPRequestHandler):
+    PODCAST_URL = 'https://anchor.fm/s/49f0c604/podcast/rss'
     def do_GET(self):
+        # Busca e analisa os dados do podcast
+        xml_text = fetch_podcast_data()
+        podcast_data = parse_podcast_data(xml_text)
+
+        # Retorna os dados do podcast em formato JSON
         self.send_response(200)
-        self.send_header('Content-type','text/plain')
+        self.send_header('Content-Type', 'application/json')
         self.end_headers()
-        self.wfile.write('Hello, world!'.encode('utf-8'))
+        self.wfile.write(json.dumps(podcast_data).encode())
         return
+
+    def rss_json():   
+        # Busca e analisa os dados do podcast
+        xml_text = fetch_podcast_data()
+        
+        if not xml_text:
+            return jsonify({'error': 'Erro ao buscar o feed do podcast'})
+
+        podcast_data = parse_podcast_data(xml_text)
+        
+        # Retorna os dados do podcast em formato JSON
+        return jsonify(podcast_data)
+
+    def fetch_podcast_data():
+        try:
+            # Fazendo a requisição para o feed RSS
+            response = requests.get(PODCAST_URL)
+            response.raise_for_status()
+            return response.text
+        except requests.exceptions.RequestException as e:
+            print(f"Erro ao buscar o feed RSS: {e}")
+            return None
+
+    def parse_podcast_data(xml_text):
+        # Converte o XML em um dicionário usando xmltodict
+        podcast_dict = xmltodict.parse(xml_text)
+        items = podcast_dict['rss']['channel']['item']
+
+        podcast_data = []
+        for item in items:
+            title = item['title']
+            enclosure_url = item['enclosure']['@url']
+            image_url = item.get('itunes:image', {}).get('@href', 'Imagem indisponível')
+
+            podcast_data.append({
+                'name': title,                        
+                'url': enclosure_url,
+                'cover_art_url': image_url
+            })
+
+        return podcast_data[:20]
+
