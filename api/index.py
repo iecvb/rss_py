@@ -12,7 +12,7 @@ def rss_json():
     xml_text = fetch_podcast_data()
     
     if not xml_text:
-        return jsonify({'error': 'Erro ao buscar o feed do podcast'}), 500, headers
+        return jsonify({'error': 'Erro ao buscar o feed do podcast'})
 
     podcast_data = parse_podcast_data(xml_text)
     
