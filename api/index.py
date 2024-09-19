@@ -5,7 +5,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse, parse_qs
 import json
 
-class RSSHandler(BaseHTTPRequestHandler):
+class handler(BaseHTTPRequestHandler):
     PODCAST_URL = 'https://anchor.fm/s/49f0c604/podcast/rss'
     def do_GET(self):
         # Busca e analisa os dados do podcast
