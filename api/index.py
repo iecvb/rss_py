@@ -6,28 +6,8 @@ PODCAST_URL = 'https://anchor.fm/s/49f0c604/podcast/rss'
 
 app = Flask(__name__)
 
-@app.route('/rss', methods=['GET'])
-def rss_json():
-    """HTTP Cloud Function.
-    Args:
-        request (flask.Request): The request object.
-        <https://flask.palletsprojects.com/en/1.1.x/api/#incoming-request-data>
-    Returns:
-        The response text, or any set of values that can be turned into a
-        Response object using `make_response`
-        <https://flask.palletsprojects.com/en/1.1.x/api/#flask.make_response>.
-    """
-    # Permite requisições de qualquer origem
-    headers = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET',
-        'Access-Control-Allow-Headers': 'Content-Type',
-    }
-
-    if request.method == 'OPTIONS':
-        # Handle preflight requests
-        return ('', 204, headers)
-
+@app.route('/')
+def rss_json():   
     # Busca e analisa os dados do podcast
     xml_text = fetch_podcast_data()
     
