@@ -34,7 +34,7 @@ class handler(BaseHTTPRequestHandler):
     def fetch_podcast_data(self):
         try:
             # Fazendo a requisição para o feed RSS
-            response = requests.get(PODCAST_URL)
+            response = requests.get(self.PODCAST_URL)
             response.raise_for_status()
             return response.text
         except requests.exceptions.RequestException as e:
