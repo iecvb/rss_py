@@ -18,7 +18,7 @@ def rss_json(request):
     """
     # Permite requisições de qualquer origem
     headers = {
-        'Access-Control-Allow-Origin': 'https://geo.compesa.com.br',
+        'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET',
         'Access-Control-Allow-Headers': 'Content-Type',
     }
