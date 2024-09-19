@@ -17,7 +17,7 @@ def rss_json():
     podcast_data = parse_podcast_data(xml_text)
     
     # Retorna os dados do podcast em formato JSON
-    return jsonify(podcast_data), 200, headers
+    return jsonify(podcast_data)
 
 def fetch_podcast_data():
     try:
