@@ -19,7 +19,7 @@ class handler(BaseHTTPRequestHandler):
         self.wfile.write(json.dumps(podcast_data).encode())
         return
 
-    def rss_json():   
+    def rss_json(self):   
         # Busca e analisa os dados do podcast
         xml_text = self.fetch_podcast_data()
         
@@ -31,7 +31,7 @@ class handler(BaseHTTPRequestHandler):
         # Retorna os dados do podcast em formato JSON
         return jsonify(podcast_data)
 
-    def fetch_podcast_data():
+    def fetch_podcast_data(self):
         try:
             # Fazendo a requisição para o feed RSS
             response = requests.get(PODCAST_URL)
@@ -41,7 +41,7 @@ class handler(BaseHTTPRequestHandler):
             print(f"Erro ao buscar o feed RSS: {e}")
             return None
 
-    def parse_podcast_data(xml_text):
+    def parse_podcast_data(self, xml_text):
         # Converte o XML em um dicionário usando xmltodict
         podcast_dict = xmltodict.parse(xml_text)
         items = podcast_dict['rss']['channel']['item']
